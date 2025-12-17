@@ -5,7 +5,7 @@
 git clone https://github.com/ahnhs2k/vits.git
 cd vits
 ```
-본 레포지토리는 ouor/vits를 기반으로
+본 레포지토리는 `ouor/vits`를 기반으로
 CUDA 12.8 (cu128) 및 PyTorch 2.x 환경(RTX 50xx, Blackwell)을 지원하도록 수정된 fork입니다.
 
 ## 텍스트 클리너 선택
@@ -124,3 +124,9 @@ tensorboard --logdir checkpoints/<folder> --port 6006
 ```sh
 python server.py --config_path path/to/config.json --model_path path/to/model.pth
 ```
+
+### Differences from upstream
+- Updated AMP / autocast usage for torch>=2.6
+- Fixed mel/STFT dimension errors
+- Stable training on cu128 + DDP
+- Verified long-run convergence (70+ epochs)

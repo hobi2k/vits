@@ -5,7 +5,7 @@
 git clone https://github.com/ahnhs2k/vits.git
 cd vits
 ```
-This repository is a fork of ouor/vits, modified to support CUDA 12.8 (cu128)
+This repository is a fork of `ouor/vits`, modified to support CUDA 12.8 (cu128)
 and PyTorch ≥ 2.x, required for RTX 50xx (Blackwell) GPUs.
 
 ## Choose cleaners
@@ -127,6 +127,12 @@ python server.py --config_path path/to/config.json --model_path path/to/model.pt
 ```sh
 docker run -itd --gpus all --name "Container name" -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all "Image name"
 ```
+
+### Differences from upstream
+- Updated AMP / autocast usage for torch>=2.6
+- Fixed mel/STFT dimension errors
+- Stable training on cu128 + DDP
+- Verified long-run convergence (70+ epochs)
 
 
 
