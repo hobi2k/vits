@@ -2,8 +2,12 @@
 # How to use
 ## Clone this repository
 ```sh
-git clone https://github.com/ouor/vits.git
+git clone https://github.com/ahnhs2k/vits.git
+cd vits
 ```
+This repository is a fork of ouor/vits, modified to support CUDA 12.8 (cu128)
+and PyTorch ≥ 2.x, required for RTX 50xx (Blackwell) GPUs.
+
 ## Choose cleaners
 
 - Fill "text_cleaners" in config.json
@@ -11,18 +15,33 @@ git clone https://github.com/ouor/vits.git
 - Edit text/symbols.py
 - Remove unnecessary imports from text/cleaners.py
 ## Create virtual environment
+
+Windows
+
 ```sh
 python -m venv .venv
 .\.venv\Scripts\activate
 ```
+
+Linux / WSL
+
+```sh
+uv venv --python 3.10
+source .venv/bin/activate
+```
+
 ## Install pytorch
 ```sh
-pip3 install torch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 --index-url https://download.pytorch.org/whl/cu117
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
 ```
 ## Install requirements
 ```sh
 pip install -r requirements.txt
 ```
+
+`requirements.txt` does NOT include PyTorch.
+Make sure PyTorch is installed before running this command.
+
 If error occurs while install requirements, Install [visual studio build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools) and try again.
 ## Build monotonic alignment search
 ```sh
@@ -31,7 +50,15 @@ mkdir monotonic_align
 python setup.py build_ext --inplace
 cd ..
 ```
+
+Windows native Python may fail to build this module.
+WSL2 or Linux environment is strongly recommended.
+
 ## Create datasets
+
+All wav files must match sampling_rate in config.json
+(Recommended: 22050Hz / mono / PCM_16)
+
 ### Single speaker
 "n_speakers" should be 0 in config.json
 ```
@@ -51,6 +78,12 @@ path/to/XXX.wav|speaker id|transcript
 dataset/001.wav|0|こんにちは。
 ```
 ## Preprocess
+
+This step is OPTIONAL.
+- If your text is already normalized
+- And "cleaned_text": true is set in config.json
+You can skip preprocess.py
+
 If you need random pick from full filelist..
 ```sh
 python random_pick.py --filelist path/to/filelist.txt
@@ -94,4 +127,6 @@ python server.py --config_path path/to/config.json --model_path path/to/model.pt
 ```sh
 docker run -itd --gpus all --name "Container name" -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all "Image name"
 ```
+
+
 

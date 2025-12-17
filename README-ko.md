@@ -2,27 +2,45 @@
 
 ## 레포지토리 클론
 ```sh
-git clone https://github.com/ouor/vits.git
+git clone https://github.com/ahnhs2k/vits.git
+cd vits
 ```
+본 레포지토리는 ouor/vits를 기반으로
+CUDA 12.8 (cu128) 및 PyTorch 2.x 환경(RTX 50xx, Blackwell)을 지원하도록 수정된 fork입니다.
+
 ## 텍스트 클리너 선택
 - config.json 파일의 "text_cleaners"에 사용할 텍스트 클리너를 적어줍니다.
 - 별도로 수정하지 않으면 'korean_cleaners'라는 한국어 텍스트 클리너를 사용합니다.
 - 사용할 심볼도 수정해줍니다. [symbols.py](text/symbols.py)에서 수정할 수 있습니다.
 ## 가상환경을 만들고 활성화합니다.
+
+Windows
+
 ```sh
 python -m venv .venv
 .\.venv\Scripts\activate
 ```
 
+Linux / WSL
+
+```sh
+uv venv --python 3.10
+source .venv/bin/activate
+```
+
 ## 파이토치 설치
 ```sh
-pip3 install torch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 --index-url https://download.pytorch.org/whl/cu117
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
 ```
 
 ## 필요한 라이브러리 설치
 ```sh
 pip install -r requirements.txt
 ```
+
+requirements.txt에는 PyTorch가 포함되어 있지 않습니다.
+반드시 PyTorch를 먼저 설치한 후 실행하세요.
+
 설치 중 'subprocess exited with error' 같은 에러가 발생하면, [visual studio build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools)를 설치하고 재부팅 후 다시 시도해보세요.
 
 ## monotonic alignment 라이브러리 설치
@@ -32,6 +50,10 @@ mkdir monotonic_align
 python setup.py build_ext --inplace
 cd ..
 ```
+
+Windows 기본 Python 환경에서는 컴파일 에러가 발생할 수 있습니다.
+WSL2 또는 Linux 환경 사용을 강력히 권장합니다.
+
 역시 설치 중 'subprocess exited with error' 같은 에러가 발생하면, [visual studio build tools](https://visualstudio.microsoft.com/downloads/?q=build+tools)를 설치하고 재부팅 후 다시 시도해보세요.
 
 ## 데이터셋 준비
